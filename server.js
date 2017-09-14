@@ -1,7 +1,7 @@
 var http = require('http')
   , exec = require('exec')
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT || 18340
 // const PORT = 12345
   , PATH = '../app'
 

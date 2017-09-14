@@ -7,6 +7,6 @@ WORKDIR /webhook-server
 
 RUN npm install
 
-EXPOSE 18340
+EXPOSE 18340:18340
 
 CMD ["npm", "start"]
