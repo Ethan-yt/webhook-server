@@ -9,4 +9,4 @@ RUN npm install
 
 EXPOSE 18340
 
-CMD ["node ", "server.js"]
+CMD ["npm", "start"]
