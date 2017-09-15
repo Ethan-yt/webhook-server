@@ -35,4 +35,4 @@ var deployServer = http.createServer(function (request, response) {
 })
 
 deployServer.listen(PORT)
-console.log("Server running at port " + PORT)
+process.stdout.write("Server running at port " + PORT)
