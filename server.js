@@ -2,8 +2,7 @@ var http = require('http')
   , exec = require('exec')
 
 const PORT = process.env.PORT || 18340
-// const PORT = 12345
-  , PATH = '../app'
+  , PATH = process.env.PATH
 
 var deployServer = http.createServer(function (request, response) {
   if (request.url.search(/deploy\/?$/i) > 0) {
