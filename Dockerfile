@@ -8,8 +8,6 @@ WORKDIR /webhook-server
 
 RUN npm install
 
-VOLUME /data
-
 EXPOSE 18340
 
 CMD ["npm", "start"]
