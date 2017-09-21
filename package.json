@@ -18,6 +18,5 @@
   },
   "homepage": "https://github.com/Ethan0w0/webhook-server#readme",
   "dependencies": {
-    "exec": "^0.2.1"
   }
 }

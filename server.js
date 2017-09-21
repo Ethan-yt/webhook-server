@@ -1,5 +1,5 @@
 var http = require('http')
-  , exec = require('exec')
+  , exec = require('child_process').exec
 
 const PORT = process.env.PORT || 18340
   , PATH = process.env.DIR
@@ -15,23 +15,21 @@ var deployServer = http.createServer(function (request, response) {
       'docker rmi app',
       'docker build --rm --no-cache -t app . ',
       'docker run -d -p 8000:8000 --name=app app'
-    ].join(' && ')
-
-    exec(commands, function (err, out, code) {
-      if (err instanceof Error) {
-        response.writeHead(500)
-        response.end('Server Internal Error.')
-        throw err
-      }
-      process.stderr.write(err)
-      process.stdout.write(out)
-      response.writeHead(200)
-      response.end('Deploy Done.')
-
-    })
-
+    ]
+    for (cmd in commands) {
+      exec(cmd, function (err, stdout, stderr) {
+        if (err) {
+          response.writeHead(500)
+          response.end('Server Internal Error.\r\n' + err)
+          process.stderr.write(err)
+          throw err
+        }
+        process.stdout.write(stdout)
+        response.writeHead(200)
+        response.end('Deploy Done.')
+      })
+    }
   } else {
-
     response.writeHead(404)
     response.end('Not Found.')
 
