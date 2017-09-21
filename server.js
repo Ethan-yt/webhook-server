@@ -48,7 +48,7 @@ var deployServer = http.createServer(function (request, response) {
     }).connect({
       host: '138.68.43.201',
       username: 'root',
-      privateKey: require('fs').readFileSync('/Volumes/macFile/Files/.ssh/id_rsa')
+      privateKey: require('fs').readFileSync('/root/.ssh/id_rsa')
     });
 
 
