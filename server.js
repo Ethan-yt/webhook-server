@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 18340
 var command = [
   'cd ' + PATH,
   'git pull',
-  'docker rm app || true',
+  'docker rm -f app || true',
   'docker rmi app || true',
   'docker build -q --rm --no-cache -t app . ',
   'docker run -d -p 8000:8000 --name=app app',
