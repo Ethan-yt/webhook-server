@@ -8,8 +8,13 @@ var deployServer = http.createServer(function (request, response) {
   if (request.url.search(/deploy\/?$/i) > 0) {
 
     var commands = [
+      'ssh root@138.68.43.201',
       'cd ' + PATH,
-      'git pull'
+      'git pull',
+      'docker rm app',
+      'docker rmi app',
+      'docker build --rm --no-cache -t app . ',
+      'docker run -d -p 8000:8000 --name=app app'
     ].join(' && ')
 
     exec(commands, function (err, out, code) {

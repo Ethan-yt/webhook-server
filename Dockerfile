@@ -1,7 +1,7 @@
 FROM node:latest 
 
 ENV PORT 18340
-ENV DIR /data/node-test
+ENV DIR ~/node-test
 
 COPY . /webhook-server
 WORKDIR /webhook-server
