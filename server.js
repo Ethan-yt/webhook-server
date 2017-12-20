@@ -33,9 +33,9 @@ var deployServer = http.createServer(function (request, response) {
       post = querystring.parse(post);
 
       var reg = /heads\/(.*)/;
-      
+      console.log(post);
       console.log(reg.exec(post.ref)[1]);
-      
+
 
       var Client = require('ssh2').Client;
       var conn = new Client();
