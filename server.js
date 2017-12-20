@@ -69,17 +69,15 @@ var deployServer = http.createServer(function (request, response) {
     request.on('end', function () {
       try {
         const json = JSON.parse(post);
-
-        var reg = /heads\/(.*)/;
-        var branchName = reg.exec(json.ref)[1];
-
-        ssh(branchName);
-
       } catch (err) {
         console.error("request body was not JSON");
         response.writeHead(500);
         response.end('request body was not JSON.');
       }
+
+      var reg = /heads\/(.*)/;
+      var branchName = reg.exec(json.ref)[1];
+      ssh(branchName);
     });
 
   } else {
