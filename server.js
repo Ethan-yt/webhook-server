@@ -14,7 +14,7 @@ var command = [
   'docker build -q --rm --no-cache -t app . ',
   'docker run -d -p 8000:8000 --name=app app',
   'exit'
-].join('&&');
+];
 
 
 function ssh(branchName) {
@@ -23,7 +23,7 @@ function ssh(branchName) {
   conn.on('ready', function () {
     console.log('Client :: ready');
     command[1] += branchName;
-    conn.exec(command, function (err, stream) {
+    conn.exec(command.join('&&'), function (err, stream) {
       if (err) {
         response.writeHead(500);
         response.end('Server Internal Error.\r\n' + err.message);
