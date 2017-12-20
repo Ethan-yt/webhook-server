@@ -67,8 +67,9 @@ var deployServer = http.createServer(function (request, response) {
     });
 
     request.on('end', function () {
+      var json;
       try {
-        const json = JSON.parse(post);
+        json = JSON.parse(post);
       } catch (err) {
         console.error("request body was not JSON");
         response.writeHead(500);
