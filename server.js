@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 18340,
 
 var command = [
   'cd ' + PATH,
-  'git pull',
   'git checkout ',
+  'git pull',
   'docker rm -f app || true',
   'docker rmi app || true',
   'docker build -q --rm --no-cache -t app . ',
@@ -22,7 +22,7 @@ function ssh(branchName) {
   var conn = new Client();
   conn.on('ready', function () {
     console.log('Client :: ready');
-    command[2] += branchName;
+    command[1] += branchName;
     conn.exec(command, function (err, stream) {
       if (err) {
         response.writeHead(500);
