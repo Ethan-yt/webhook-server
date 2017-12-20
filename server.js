@@ -12,7 +12,7 @@ var command = [
   'docker rm -f app || true',
   'docker rmi app || true',
   'docker build -q --rm --no-cache -t app . ',
-  'docker run -d -p 8000:8000 --name=app app',
+  'docker run -d -p 8000:8000 -p 7999:7999 --name=app app',
   'exit'
 ];
 
