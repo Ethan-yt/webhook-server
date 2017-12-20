@@ -49,7 +49,7 @@ function ssh(branchName) {
   }).connect({
     host: '138.68.43.201',
     username: 'root',
-    privateKey: require('fs').readFileSync('/root/.ssh/id_rsa')
+    privateKey: require('fs').readFileSync('/webhook-key/key')
   });
 }
 
