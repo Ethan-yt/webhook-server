@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 18340,
 var command = [
   'cd ' + PATH,
   'git pull',
+  'git checkout ',
   'docker rm -f app || true',
   'docker rmi app || true',
   'docker build -q --rm --no-cache -t app . ',
@@ -16,11 +17,12 @@ var command = [
 ].join('&&');
 
 
-function ssh() {
+function ssh(branchName) {
   var Client = require('ssh2').Client;
   var conn = new Client();
   conn.on('ready', function () {
     console.log('Client :: ready');
+    command[2] += branchName;
     conn.exec(command, function (err, stream) {
       if (err) {
         response.writeHead(500);
@@ -69,9 +71,9 @@ var deployServer = http.createServer(function (request, response) {
         const json = JSON.parse(post);
 
         var reg = /heads\/(.*)/;
-        console.log(reg.exec(json.ref)[1]);
+        var branchName = reg.exec(json.ref)[1];
 
-        //ssh();
+        ssh(branchName);
 
       } catch (err) {
         console.error("request body was not JSON");
