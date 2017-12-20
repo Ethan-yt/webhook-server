@@ -16,6 +16,43 @@ var command = [
 ].join('&&');
 
 
+function ssh() {
+  var Client = require('ssh2').Client;
+  var conn = new Client();
+  conn.on('ready', function () {
+    console.log('Client :: ready');
+    conn.exec(command, function (err, stream) {
+      if (err) {
+        response.writeHead(500);
+        response.end('Server Internal Error.\r\n' + err.message);
+        console.log('ERROR: ' + err.message)
+        conn.end();
+      }
+      stream.on('close', function (code, signal) {
+        console.log('Stream :: close :: code: ' + code + ', signal: ' + signal);
+        if (code == 0) {
+          response.writeHead(200);
+          response.end('Deploy Done.');
+        } else {
+          response.writeHead(500);
+          response.end('Server Internal Error.');
+        }
+        conn.end();
+      }).on('data', function (data) {
+        console.log('STDOUT: ' + data);
+      }).stderr.on('data', function (data) {
+        console.log('STDERR: ' + data)
+      });
+    });
+  }).connect({
+    host: '138.68.43.201',
+    username: 'root',
+    privateKey: require('fs').readFileSync('/root/.ssh/id_rsa')
+  });
+}
+
+
+
 var deployServer = http.createServer(function (request, response) {
   if (request.url.search(/deploy\/?$/i) > 0) {
 
@@ -27,54 +64,21 @@ var deployServer = http.createServer(function (request, response) {
       post += chunk;
     });
 
-
-
     request.on('end', function () {
-      post = querystring.parse(post);
+      try {
+        const json = JSON.parse(post);
 
-      var reg = /heads\/(.*)/;
-      console.log(post);
-      console.log(reg.exec(post.ref)[1]);
+        var reg = /heads\/(.*)/;
+        console.log(reg.exec(json.ref)[1]);
 
+        //ssh();
 
-      var Client = require('ssh2').Client;
-      var conn = new Client();
-      conn.on('ready', function () {
-        console.log('Client :: ready');
-        conn.exec(command, function (err, stream) {
-          if (err) {
-            response.writeHead(500);
-            response.end('Server Internal Error.\r\n' + err.message);
-            console.log('ERROR: ' + err.message)
-            conn.end();
-          }
-          stream.on('close', function (code, signal) {
-            console.log('Stream :: close :: code: ' + code + ', signal: ' + signal);
-            if (code == 0) {
-              response.writeHead(200);
-              response.end('Deploy Done.');
-            } else {
-              response.writeHead(500);
-              response.end('Server Internal Error.');
-            }
-            conn.end();
-          }).on('data', function (data) {
-            console.log('STDOUT: ' + data);
-          }).stderr.on('data', function (data) {
-            console.log('STDERR: ' + data)
-          });
-        });
-      }).connect({
-        host: '138.68.43.201',
-        username: 'root',
-        privateKey: require('fs').readFileSync('/root/.ssh/id_rsa')
-      });
-
+      } catch (err) {
+        console.error("request body was not JSON");
+        response.writeHead(500);
+        response.end('request body was not JSON.');
+      }
     });
-
-
-
-
 
   } else {
     response.writeHead(404)
