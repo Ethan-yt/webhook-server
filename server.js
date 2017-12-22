@@ -45,7 +45,7 @@ var deployServer = http.createServer(function (request, response) {
       var conn = new Client();
       conn.on('ready', function () {
         console.log('Client :: ready');
-        command[1] += branchName;
+        command[1] = "git checkout " + branchName;
         conn.exec(command.join('&&'), function (err, stream) {
           if (err) {
             response.writeHead(500);
