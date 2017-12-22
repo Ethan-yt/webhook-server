@@ -9,8 +9,8 @@ var command = [
   'cd ' + PATH,
   'git checkout ',
   'git pull',
-  'docker rm -f app || true',
   'docker rmi app || true',
+  'docker rm -f app || true',
   'docker build -q --rm --no-cache -t app . ',
   'docker run -d -p 8000:8000 -p 7999:7999 --name=app app',
   'exit'
@@ -40,6 +40,7 @@ var deployServer = http.createServer(function (request, response) {
 
       var reg = /heads\/(.*)/;
       var branchName = reg.exec(json.ref)[1];
+      console.log("branch: " + branchName);
       var Client = require('ssh2').Client;
       var conn = new Client();
       conn.on('ready', function () {
